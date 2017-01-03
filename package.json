@@ -1,0 +1,15 @@
+{
+  "name": "systemctl-discord-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "a bot that does things",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "dependencies": {
+    "discord.js": "11.0.0"
+  },
+  "author": "Phoenix",
+  "license": "ISC"
+}
