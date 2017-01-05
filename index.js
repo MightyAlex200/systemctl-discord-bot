@@ -106,7 +106,6 @@ class Bot {
                             'user-agent': 'systemctl-bot/1.1.0'
                         }
                     };
-                    console.log(options.path);
                     https.get(options, (res) => {
                         var str = '';
                         res.on('data', (d) => {
@@ -114,8 +113,16 @@ class Bot {
                         });
                         res.on('end', () => {
                             //console.log(JSON.parse(str)[parseInt(parsed[2])]);
-                            if (JSON.parse(str) != []) {
-                                message.channel.sendFile(JSON.parse(str)[0].file_url);
+                            var parsedjson = JSON.parse(str);
+                            if (parsedjson != []) {
+                                ///message.channel.sendFile(JSON.parse(str)[0].file_url);
+                                var embed = new Discord.RichEmbed({
+                                    title: "Result:",
+                                    url: parsedjson[0].file_url
+                                });
+                                embed.setImage(parsedjson[0].preview_url);
+                                message.channel.sendEmbed(embed);
+                                console.log(parsedjson[0].preview_url);
                             } else {
                                 message.reply("404, file not found");
                             }
