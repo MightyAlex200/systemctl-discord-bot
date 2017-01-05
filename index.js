@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const https = require('https');
 
 class Bot {
 
@@ -94,6 +95,30 @@ class Bot {
                         message.reply(message.author.avatarURL);
                     }
                 }
+            }
+            if (parsed[1] == "e621") {
+                var options = {
+                    hostname: "e621.net",
+                    path: "/post/index.json?tags=" + message.content.slice(16 + parsed[2].length).replace(" ", "+"),
+                    port: 443,
+                    headers: {
+                        'user-agent': 'systemctl-bot/1.1.0'
+                    }
+                };
+                https.get(options, (res) => {
+                    var str = '';
+                    res.on('data', (d) => {
+                        str += d;
+                    });
+                    res.on('end', () => {
+                        //console.log(JSON.parse(str)[parseInt(parsed[2])]);
+                        if (parseInt(parsed[2] - 1) in JSON.parse(str))
+                            message.channel.sendFile(JSON.parse(str)[parseInt(parsed[2]) - 1].file_url);
+                        else
+                            message.reply("404, file not found");
+                    })
+                });
+
             }
         }
         this.aspamlist[message.author.username] = Math.min(this.aspamlist[message.author.username] + 1 || 1, 5);
