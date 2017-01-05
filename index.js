@@ -97,28 +97,33 @@ class Bot {
                 }
             }
             if (parsed[1] == "e621") {
-                var options = {
-                    hostname: "e621.net",
-                    path: "/post/index.json?tags=" + message.content.slice(16 + parsed[2].length).replace(" ", "+") + "&limit=1&page=" + parsed[2],
-                    port: 443,
-                    headers: {
-                        'user-agent': 'systemctl-bot/1.1.0'
-                    }
-                };
-                https.get(options, (res) => {
-                    var str = '';
-                    res.on('data', (d) => {
-                        str += d;
-                    });
-                    res.on('end', () => {
-                        //console.log(JSON.parse(str)[parseInt(parsed[2])]);
-                        if (JSON.parse(str) != []){
-                            message.channel.sendFile(JSON.parse(str)[0].file_url);
-                        }else{
-                            message.reply("404, file not found");
+                if (parsed[2] != "") {
+                    var options = {
+                        hostname: "e621.net",
+                        path: "/post/index.json?tags=" + message.content.slice(16 + parsed[2].length).replace(/ /g, "+") + "&limit=1&page=" + parsed[2],
+                        port: 443,
+                        headers: {
+                            'user-agent': 'systemctl-bot/1.1.0'
                         }
-                    })
-                });
+                    };
+                    console.log(options.path);
+                    https.get(options, (res) => {
+                        var str = '';
+                        res.on('data', (d) => {
+                            str += d;
+                        });
+                        res.on('end', () => {
+                            //console.log(JSON.parse(str)[parseInt(parsed[2])]);
+                            if (JSON.parse(str) != []) {
+                                message.channel.sendFile(JSON.parse(str)[0].file_url);
+                            } else {
+                                message.reply("404, file not found");
+                            }
+                        })
+                    });
+                } else {
+                    message.reply("parsed[2] equaled null!");
+                }
 
             }
         }
