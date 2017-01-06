@@ -96,11 +96,15 @@ class Bot {
                     }
                 }
             }
-            if (parsed[1] == "e621") {
+            if (parsed[1] == "e621" || parsed[1] == "e926") {
                 if (parsed[2] != "") {
+                    var e926 = "";
+                    if (parsed[1] == "e926"){
+                        e926 = "+rating:s"
+                    }
                     var options = {
                         hostname: "e621.net",
-                        path: "/post/index.json?tags=" + message.content.slice(16 + parsed[2].length).replace(/ /g, "+") + "&limit=1&page=" + parsed[2],
+                        path: "/post/index.json?tags=" + message.content.slice(16 + parsed[2].length).replace(/ /g, "+") + e926 + "&limit=1&page=" + parsed[2],
                         port: 443,
                         headers: {
                             'user-agent': 'systemctl-bot/1.1.0'
