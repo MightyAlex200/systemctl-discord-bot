@@ -121,6 +121,12 @@ class Bot {
                                     url: parsedjson[0].file_url
                                 });
                                 embed.setImage(parsedjson[0].preview_url);
+                                if (parsedjson[0].score > 0) {
+                                    embed.setColor([0, 255, 0]);
+                                } else {
+                                    embed.setColor([255, 0, 0]);
+                                }
+                                embed.setFooter("score: " + parsedjson[0].score);
                                 message.channel.sendEmbed(embed);
                                 console.log(parsedjson[0].preview_url);
                             } else {
