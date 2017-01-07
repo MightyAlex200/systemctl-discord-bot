@@ -125,7 +125,11 @@ class Bot {
                                     title: "Result:",
                                     url: parsedjson[0].file_url
                                 });
-                                embed.setImage(parsedjson[0].preview_url);
+                                if(parsedjson[0].file_ext == "swf" || parsedjson[0].file_ext == "webm"){
+                                    embed.setImage(parsedjson[0].preview_url);
+                                }else{
+                                    embed.setImage(parsedjson[0].file_url);
+                                }
                                 if (parsedjson[0].score > 0) {
                                     embed.setColor([0, 255, 0]);
                                 } else {
@@ -133,6 +137,9 @@ class Bot {
                                 }
                                 embed.setFooter("score: " + parsedjson[0].score);
                                 message.channel.sendEmbed(embed);
+                                if(parsedjson[0].rating == 'e'){
+                                    message.channel.sendMessage("( ͡° ͜ʖ ͡°)");
+                                }
                                 console.log(parsedjson[0].preview_url);
                             } else {
                                 message.reply("404, file not found");
