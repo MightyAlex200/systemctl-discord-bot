@@ -97,9 +97,9 @@ class Bot {
                 }
             }
             if (parsed[1] == "e621" || parsed[1] == "e926") {
-                if (parsed[2] != "") {
+                if (!isNaN(parseInt(parsed[2]))) {
                     var e926 = "";
-                    if (parsed[1] == "e926"){
+                    if (parsed[1] == "e926") {
                         e926 = "+rating:s"
                     }
                     var options = {
@@ -110,6 +110,7 @@ class Bot {
                             'user-agent': 'systemctl-bot/1.1.0'
                         }
                     };
+                    console.log(options.path);
                     https.get(options, (res) => {
                         var str = '';
                         res.on('data', (d) => {
@@ -118,7 +119,7 @@ class Bot {
                         res.on('end', () => {
                             //console.log(JSON.parse(str)[parseInt(parsed[2])]);
                             var parsedjson = JSON.parse(str);
-                            if (parsedjson != []) {
+                            if (str != "[]") {
                                 ///message.channel.sendFile(JSON.parse(str)[0].file_url);
                                 var embed = new Discord.RichEmbed({
                                     title: "Result:",
@@ -139,7 +140,7 @@ class Bot {
                         })
                     });
                 } else {
-                    message.reply("parsed[2] equaled null!");
+                    message.reply("parsed[2] was incorrect (3rd character seperated by spaces should be number)!");
                 }
 
             }
