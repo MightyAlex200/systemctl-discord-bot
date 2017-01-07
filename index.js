@@ -13,28 +13,28 @@ class Bot {
     }
 
     parse(message) {
-        var parsed = message.content.split(" ");
+        var parsed = message.content.toLowerCase().split(" ");
         if (message.channel.type == "dm") {
             if (message.author.id == "140561788688269312" || message.author.id == "74549416190545920") {
                 // This is a dm command
-                if (message.content == "servers") {
+                if (message.content.toLowerCase() == "servers") {
                     message.reply(client.guilds.array().toString().replace(",", ", "));
                 }
-                if (message.content == "server") {
+                if (message.content.toLowerCase() == "server") {
                     if (this.server) {
                         message.reply(this.server.name);
                     } else {
                         message.reply("Not in server");
                     }
                 }
-                if (message.content == "channels") {
+                if (message.content.toLowerCase() == "channels") {
                     if (this.server) {
                         message.reply(this.server.channels.array().toString().replace(",", ", "));
                     } else {
                         message.reply("Not in server");
                     }
                 }
-                if (message.content == "channel") {
+                if (message.content.toLowerCase() == "channel") {
                     if (this.channel) {
                         message.reply(this.channel.name + " in " + this.server.name);
                     } else {
@@ -125,9 +125,9 @@ class Bot {
                                     title: "Result:",
                                     url: parsedjson[0].file_url
                                 });
-                                if(parsedjson[0].file_ext == "swf" || parsedjson[0].file_ext == "webm"){
+                                if (parsedjson[0].file_ext == "swf" || parsedjson[0].file_ext == "webm") {
                                     embed.setImage(parsedjson[0].preview_url);
-                                }else{
+                                } else {
                                     embed.setImage(parsedjson[0].file_url);
                                 }
                                 if (parsedjson[0].score > 0) {
@@ -137,7 +137,7 @@ class Bot {
                                 }
                                 embed.setFooter("score: " + parsedjson[0].score);
                                 message.channel.sendEmbed(embed);
-                                if(parsedjson[0].rating == 'e'){
+                                if (parsedjson[0].rating == 'e') {
                                     message.channel.sendMessage("( ͡° ͜ʖ ͡°)");
                                 }
                                 console.log(parsedjson[0].preview_url);
