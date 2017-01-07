@@ -147,7 +147,7 @@ class Bot {
                         })
                     });
                 } else {
-                    message.reply("parsed[2] was incorrect (3rd character seperated by spaces should be number)!");
+                    message.reply("parsed[2] was incorrect (3rd word seperated by spaces should be number)!");
                 }
 
             }
