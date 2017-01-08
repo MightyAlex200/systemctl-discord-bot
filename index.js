@@ -146,9 +146,37 @@ class Bot {
                             }
                         })
                     });
-                } else {
-                    message.reply("parsed[2] was incorrect (3rd word seperated by spaces should be number)!");
-                }
+                } else { 
+                    if(parsed[2] == "count"){
+                        var e926 = "";
+                        if (parsed[1] == "e926") {
+                            e926 = "+rating:s"
+                        }
+                        var options = {
+                            hostname: "e621.net",
+                            path: "/post/index.json?limit=320&tags=" + message.content.slice(16 + parsed[2].length).replace(/ /g, "+") + e926,
+                            port: 443,
+                            headers: {
+                                'user-agent': 'systemctl-bot/1.1.0'
+                            }
+                        };
+                        https.get(options, (res) => {
+                            var str = '';
+                            res.on('data', (d) => {
+                                str+=d;
+                            });
+                            res.on('end', () => {
+                                var parsedjson = JSON.parse(str);
+                                if (parsedjson.length != 320)
+                                    message.reply(parsedjson.length);
+                                else
+                                    message.reply("320+");
+                            })
+                        });
+                    } else {
+                        message.reply("parsed[2] was incorrect (3rd word seperated by spaces should be number)!");
+                    }  
+                } 
 
             }
         }
