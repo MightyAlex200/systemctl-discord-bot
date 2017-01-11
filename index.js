@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const https = require('https');
+fs = require('fs');
 
 class Bot {
 
@@ -146,8 +147,8 @@ class Bot {
                             }
                         })
                     });
-                } else { 
-                    if(parsed[2] == "count"){
+                } else {
+                    if (parsed[2] == "count") {
                         var e926 = "";
                         if (parsed[1] == "e926") {
                             e926 = "+rating:s"
@@ -163,7 +164,7 @@ class Bot {
                         https.get(options, (res) => {
                             var str = '';
                             res.on('data', (d) => {
-                                str+=d;
+                                str += d;
                             });
                             res.on('end', () => {
                                 var parsedjson = JSON.parse(str);
@@ -175,8 +176,8 @@ class Bot {
                         });
                     } else {
                         message.reply("parsed[2] was incorrect (3rd word seperated by spaces should be number)!");
-                    }  
-                } 
+                    }
+                }
 
             }
         }
@@ -203,7 +204,17 @@ client.on('message', message => {
     b.parse(message);
 });
 
-client.login('MjY1NTcyNDk2MjIzMzcxMjY1.C0xFlg.nraNxYADdNfkWSCdgCHTCsAKLss');
+var passwd;
+
+fs.readFile('passwords.log', 'utf8', (e, f) => {
+    if (!e) {
+        passwd = f;
+        client.login(passwd);
+    } else {
+        console.log(e);
+    }
+});
+
 
 setInterval(function () {
     for (var spamval in b.aspamlist) {
