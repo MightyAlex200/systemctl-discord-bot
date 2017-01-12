@@ -216,8 +216,40 @@ fs.readFile('passwords.log', 'utf8', (e, f) => {
 });
 
 
-setInterval(function () {
+setInterval(() => {
     for (var spamval in b.aspamlist) {
         b.aspamlist[spamval] = Math.max(b.aspamlist[spamval] - 1, 0);
     }
 }, 2500);
+
+setInterval(() => {
+    var last;
+    fs.readFile('lastposted.log', 'utf8', (e, d) => {
+        last = d;
+        var options = {
+            hostname: "e621.net",
+            path: "/post/index.json?limit=1&tags=favoritedby:furrylocked",
+            port: 443,
+            headers: {
+                'user-agent': 'systemctl-bot/1.1.0'
+            }
+        }
+        https.get(options, (res) => {
+            var str = '';
+            res.on('data', (d) => {
+                str += d;
+            });
+            res.on('end', () => {
+                var parsedjson = JSON.parse(str);
+                // console.log(parsedjson[0].id);
+                if (last != parsedjson[0].id.toString()) {
+                    // console.log('new post! ' + last + ' to ' + parsedjson[0].id.toString());
+                    client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('Nitro faved something on e621 ( ͡° ͜ʖ ͡°). https://e621.net/post/show.json?id=' + parsedjson[0].id.toString());
+                }
+                fs.writeFile('lastposted.log', parsedjson[0].id.toString(), (err) => {
+                    if (err) console.log('error saving lastposted.log file! ' + err);
+                });
+            });
+        });
+    });
+}, 30000);
