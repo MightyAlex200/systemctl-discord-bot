@@ -241,9 +241,8 @@ setInterval(() => {
 }, 2500);
 
 setInterval(() => {
-    var last;
     fs.readFile('lastposted.log', 'utf8', (e, d) => {
-        last = d;
+        var last = d;
         var options = {
             hostname: "e621.net",
             path: "/post/index.json?limit=1&tags=favoritedby:furrylocked",
@@ -264,9 +263,44 @@ setInterval(() => {
                     // console.log('new post! ' + last + ' to ' + parsedjson[0].id.toString());
                     client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('Nitro faved something on e621 ( ͡° ͜ʖ ͡°).');
                     client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('systemctl e621 1 favoritedby:furrylocked');
+                    // console.log('got something from nitro: ' + last + ' to ' + parsedjson[0].id.toString());
                 }
                 fs.writeFile('lastposted.log', parsedjson[0].id.toString(), (err) => {
                     if (err) console.log('error saving lastposted.log file! ' + err);
+                });
+            });
+        });
+    });
+    fs.readFile('lastposted-hitius.log', 'utf8', (e, d) => {
+        var last = d;
+        var options = {
+            hostname: "e621.net",
+            path: "/post/index.json?limit=1&tags=favoritedby:hitius",
+            port: 443,
+            headers: {
+                'user-agent': 'systemctl-bot/1.1.0'
+            }
+        }
+        https.get(options, (res) => {
+            var str = '';
+            res.on('data', (d) => {
+                str += d;
+            });
+            res.on('end', () => {
+                var parsedjson = JSON.parse(str);
+                // console.log(parsedjson[0].id);
+                if (last != parsedjson[0].id.toString()) {
+                    // console.log('new post! ' + last + ' to ' + parsedjson[0].id.toString());
+                    var e926 = 'e621';
+                    if (parsedjson[0].rating == 's') {
+                        e926 = 'e926';
+                    }
+                    client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('hitius faved something on ' + e926);
+                    client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('systemctl e621 1 favoritedby:hitius');
+                    // console.log('got something from hitius: ' + last + ' to ' + parsedjson[0].id.toString());
+                }
+                fs.writeFile('lastposted-hitius.log', parsedjson[0].id.toString(), (err) => {
+                    if (err) console.log('error saving lastposted-hitius.log file! ' + err);
                 });
             });
         });
