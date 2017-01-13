@@ -244,7 +244,8 @@ setInterval(() => {
                 // console.log(parsedjson[0].id);
                 if (last != parsedjson[0].id.toString()) {
                     // console.log('new post! ' + last + ' to ' + parsedjson[0].id.toString());
-                    client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('Nitro faved something on e621 ( ͡° ͜ʖ ͡°). https://e621.net/post/show.json?id=' + parsedjson[0].id.toString());
+                    client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('Nitro faved something on e621 ( ͡° ͜ʖ ͡°).');
+                    client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('systemctl e621 1 favoritedby:furrylocked');
                 }
                 fs.writeFile('lastposted.log', parsedjson[0].id.toString(), (err) => {
                     if (err) console.log('error saving lastposted.log file! ' + err);
