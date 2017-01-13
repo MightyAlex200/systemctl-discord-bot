@@ -15,7 +15,7 @@ class Bot {
 
     parse(message) {
         var parsed = message.content.toLowerCase().split(" ");
-        if (message.author.id == 140561788688269312) {
+        if (message.member.hasPermission("ADMINISTRATOR")) {
             if (message.content.startsWith("freeze all motor functions")) {
                 // message.reply("done.");
                 message.channel.overwritePermissions(message.mentions.users.first(), {
