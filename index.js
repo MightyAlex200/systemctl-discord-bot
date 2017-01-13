@@ -30,7 +30,7 @@ class Bot {
                 }
                 if (message.content.toLowerCase() == "channels") {
                     if (this.server) {
-                        message.reply(this.server.channels.array().toString().replace(",", ", "));
+                        message.reply(this.server.channels.array().toString().replace(/,/g, ", "));
                     } else {
                         message.reply("Not in server");
                     }
@@ -64,7 +64,11 @@ class Bot {
                 }
                 if (parsed[0] == "say" && this.channel) {
                     var saytext = message.content.slice(4);
-                    this.channel.sendMessage(saytext);
+                    if (this.channel.type == "text") {
+                        this.channel.sendMessage(saytext);
+                    } else {
+                        message.reply(this.channel.type + " channel");
+                    }
                 }
             }
         }
