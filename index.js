@@ -53,7 +53,7 @@ class Bot {
                     }
                 }
                 if (parsed[0] == "joinchannel" && this.server) {
-                    var jointext = message.content.slice(12);
+                    var jointext = message.content.slice(12).replace("#", "");
                     var tojoin = this.server.channels.findAll('name', jointext)[0];
                     if (tojoin) {
                         message.reply("Joined channel " + jointext);
