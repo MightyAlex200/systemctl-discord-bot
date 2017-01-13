@@ -1,3 +1,2 @@
-passwords.log
-lastposted.log
+*.log
 .directory
