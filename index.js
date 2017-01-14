@@ -15,18 +15,20 @@ class Bot {
 
     parse(message) {
         var parsed = message.content.toLowerCase().split(" ");
-        if (message.member.hasPermission("ADMINISTRATOR")) {
-            if (message.content.startsWith("freeze all motor functions")) {
-                // message.reply("done.");
-                message.channel.overwritePermissions(message.mentions.users.first(), {
-                    SEND_MESSAGES: false
-                });
-            }
-            if (message.content.startsWith("continue")) {
-                // message.reply("done.");
-                message.channel.overwritePermissions(message.mentions.users.first(), {
-                    SEND_MESSAGES: true
-                });
+        if(message.channel.type != "dm") {
+            if (message.member.hasPermission("ADMINISTRATOR")) {
+                if (message.content.startsWith("freeze all motor functions")) {
+                    // message.reply("done.");
+                    message.channel.overwritePermissions(message.mentions.users.first(), {
+                        SEND_MESSAGES: false
+                    });
+                }
+                if (message.content.startsWith("continue")) {
+                    // message.reply("done.");
+                    message.channel.overwritePermissions(message.mentions.users.first(), {
+                        SEND_MESSAGES: true
+                    });
+                }
             }
         }
         if (message.channel.type == "dm") {
