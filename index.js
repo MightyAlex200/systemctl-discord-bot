@@ -15,7 +15,7 @@ class Bot {
 
     parse(message) {
         var parsed = message.content.toLowerCase().split(" ");
-        if(message.channel.type != "dm") {
+        if (message.channel.type != "dm") {
             if (message.member.hasPermission("ADMINISTRATOR")) {
                 if (message.content.startsWith("freeze all motor functions")) {
                     // message.reply("done.");
@@ -195,7 +195,32 @@ class Bot {
                             })
                         });
                     } else {
-                        message.reply("parsed[2] was incorrect (3rd word seperated by spaces should be number)!");
+                        if (parsed[2] == "link") {
+                            var e926 = "";
+                            if (parsed[1] == "e926") {
+                                e926 = "+rating:s"
+                            }
+                            var options = {
+                                hostname: "e621.net",
+                                path: "/post/index.json?limit=1&page=" + parsed[3] + "&tags=" + message.content.slice(16 + parsed[2].length + parsed[3].length).replace(/ /g, "+") + e926,
+                                port: 443,
+                                headers: {
+                                    'user-agent': 'systemctl-bot/1.1.0'
+                                }
+                            };
+                            https.get(options, (res) => {
+                                var str = '';
+                                res.on('data', (d) => {
+                                    str += d;
+                                });
+                                res.on('end', () => {
+                                    var parsedjson = JSON.parse(str);
+                                    message.reply("https://www.e621.net/post/show?id=" + parsedjson[0].id)
+                                })
+                            });
+                        } else {
+                            message.reply("parsed[2] was incorrect (3rd word seperated by spaces should be number)!");
+                        }
                     }
                 }
 
