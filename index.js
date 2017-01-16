@@ -36,39 +36,48 @@ class Bot {
             }
         }
         if (message.channel.type == "dm") {
-            if (message.author.id == "140561788688269312" || message.author.id == "74549416190545920") {
-                // This is a dm command
-                
-                switch(parsed[0]){
-                    case "servers":
-                        message.reply(client.guilds.array().toString().replace(",", ", "));
-                        break;
+            var isadmin = message.author.id == "140561788688269312" || message.author.id == "74549416190545920"
+            // if (message.author.id == "140561788688269312" || message.author.id == "74549416190545920") {
+            // This is a dm command
 
-                    case "server": 
+            switch (parsed[0]) {
+                case "servers":
+                    if (isadmin)
+                        message.reply(client.guilds.array().toString().replace(",", ", "));
+                    break;
+
+                case "server":
+                    if (isadmin) {
                         if (this.server) {
                             message.reply(this.server.name);
                         } else {
                             message.reply("Not in server");
                         }
-                        break;
+                    }
+                    break;
 
-                    case "channels": 
+                case "channels":
+                    if (isadmin) {
                         if (this.server) {
                             message.reply(this.server.channels.array().toString().replace(/,/g, ", "));
                         } else {
                             message.reply("Not in server");
                         }
-                        break;
+                    }
+                    break;
 
-                    case "channel": 
+                case "channel":
+                    if (isadmin) {
                         if (this.channel) {
                             message.reply(this.channel.name + " in " + this.server.name);
                         } else {
                             message.reply("Not in channel");
                         }
-                        break;
+                    }
+                    break;
 
-                    case "joinserver": 
+                case "joinserver":
+                    if (isadmin) {
                         var jointext = message.content.slice(11);
                         var tojoin = client.guilds.findAll('name', jointext)[0];
                         if (tojoin) {
@@ -77,10 +86,12 @@ class Bot {
                         } else {
                             message.reply("Server not found: " + jointext)
                         }
-                        break;
+                    }
+                    break;
 
-                    case "joinchannel":
-                        if(this.server){
+                case "joinchannel":
+                    if (isadmin) {
+                        if (this.server) {
                             var jointext = message.content.slice(12).replace("#", "");
                             var tojoin = this.server.channels.findAll('name', jointext)[0];
                             if (tojoin) {
@@ -90,9 +101,11 @@ class Bot {
                                 message.reply("Channel not found: " + jointext)
                             }
                         }
-                        break;
-                    case "say": 
-                        if (this.channel){
+                    }
+                    break;
+                case "say":
+                    if (isadmin) {
+                        if (this.channel) {
                             var saytext = message.content.slice(4);
                             if (this.channel.type == "text") {
                                 this.channel.sendMessage(saytext);
@@ -100,9 +113,17 @@ class Bot {
                                 message.reply(this.channel.type + " channel");
                             }
                         }
-                        break;
-                }
+                    }
+                    break;
+                default:
+                    if (message.author.id != 265572496223371265) {
+                        cleverbot.write(message.content, (r) => {
+                            message.reply(r.message);
+                        })
+                    }
+                    break;
             }
+
         }
         if (parsed[0] == "systemctl") {
             // This is a command
