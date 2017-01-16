@@ -1,7 +1,11 @@
+const Cleverbot = require('cleverbot-node');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const https = require('https');
 fs = require('fs');
+
+cleverbot = new Cleverbot;
+Cleverbot.prepare(() => { })
 
 class Bot {
 
@@ -34,57 +38,69 @@ class Bot {
         if (message.channel.type == "dm") {
             if (message.author.id == "140561788688269312" || message.author.id == "74549416190545920") {
                 // This is a dm command
-                if (message.content.toLowerCase() == "servers") {
-                    message.reply(client.guilds.array().toString().replace(",", ", "));
-                }
-                if (message.content.toLowerCase() == "server") {
-                    if (this.server) {
-                        message.reply(this.server.name);
-                    } else {
-                        message.reply("Not in server");
-                    }
-                }
-                if (message.content.toLowerCase() == "channels") {
-                    if (this.server) {
-                        message.reply(this.server.channels.array().toString().replace(/,/g, ", "));
-                    } else {
-                        message.reply("Not in server");
-                    }
-                }
-                if (message.content.toLowerCase() == "channel") {
-                    if (this.channel) {
-                        message.reply(this.channel.name + " in " + this.server.name);
-                    } else {
-                        message.reply("Not in channel");
-                    }
-                }
-                if (parsed[0] == "joinserver") {
-                    var jointext = message.content.slice(11);
-                    var tojoin = client.guilds.findAll('name', jointext)[0];
-                    if (tojoin) {
-                        message.reply("Joined server " + jointext);
-                        this.server = tojoin;
-                    } else {
-                        message.reply("Server not found: " + jointext)
-                    }
-                }
-                if (parsed[0] == "joinchannel" && this.server) {
-                    var jointext = message.content.slice(12).replace("#", "");
-                    var tojoin = this.server.channels.findAll('name', jointext)[0];
-                    if (tojoin) {
-                        message.reply("Joined channel " + jointext);
-                        this.channel = tojoin;
-                    } else {
-                        message.reply("Channel not found: " + jointext)
-                    }
-                }
-                if (parsed[0] == "say" && this.channel) {
-                    var saytext = message.content.slice(4);
-                    if (this.channel.type == "text") {
-                        this.channel.sendMessage(saytext);
-                    } else {
-                        message.reply(this.channel.type + " channel");
-                    }
+                
+                switch(parsed[0]){
+                    case "servers":
+                        message.reply(client.guilds.array().toString().replace(",", ", "));
+                        break;
+
+                    case "server": 
+                        if (this.server) {
+                            message.reply(this.server.name);
+                        } else {
+                            message.reply("Not in server");
+                        }
+                        break;
+
+                    case "channels": 
+                        if (this.server) {
+                            message.reply(this.server.channels.array().toString().replace(/,/g, ", "));
+                        } else {
+                            message.reply("Not in server");
+                        }
+                        break;
+
+                    case "channel": 
+                        if (this.channel) {
+                            message.reply(this.channel.name + " in " + this.server.name);
+                        } else {
+                            message.reply("Not in channel");
+                        }
+                        break;
+
+                    case "joinserver": 
+                        var jointext = message.content.slice(11);
+                        var tojoin = client.guilds.findAll('name', jointext)[0];
+                        if (tojoin) {
+                            message.reply("Joined server " + jointext);
+                            this.server = tojoin;
+                        } else {
+                            message.reply("Server not found: " + jointext)
+                        }
+                        break;
+
+                    case "joinchannel":
+                        if(this.server){
+                            var jointext = message.content.slice(12).replace("#", "");
+                            var tojoin = this.server.channels.findAll('name', jointext)[0];
+                            if (tojoin) {
+                                message.reply("Joined channel " + jointext);
+                                this.channel = tojoin;
+                            } else {
+                                message.reply("Channel not found: " + jointext)
+                            }
+                        }
+                        break;
+                    case "say": 
+                        if (this.channel){
+                            var saytext = message.content.slice(4);
+                            if (this.channel.type == "text") {
+                                this.channel.sendMessage(saytext);
+                            } else {
+                                message.reply(this.channel.type + " channel");
+                            }
+                        }
+                        break;
                 }
             }
         }
