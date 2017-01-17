@@ -116,7 +116,7 @@ class Bot {
                     }
                     break;
                 default:
-                    if (message.author.id != 265572496223371265) {
+                    if (message.author.id != 265572496223371265 && !message.content.toLowerCase().startsWith("systemctl")) {
                         cleverbot.write(message.content, (r) => {
                             message.reply(r.message);
                         })
