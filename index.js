@@ -188,15 +188,15 @@ class Bot {
                                 } else {
                                     embed.setImage(parsedjson[0].file_url);
                                 }
-                                switch(parsedjson[0].rating){
+                                switch (parsedjson[0].rating) {
                                     case 's':
-                                        embed.setColor([0,255,0]);
+                                        embed.setColor([0, 255, 0]);
                                         break;
                                     case 'q':
-                                        embed.setColor([255,255,0]);
+                                        embed.setColor([255, 255, 0]);
                                         break;
                                     case 'e':
-                                        embed.setColor([255,0,0]);
+                                        embed.setColor([255, 0, 0]);
                                         break;
                                 }
                                 embed.setFooter("score: " + parsedjson[0].score);
