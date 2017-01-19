@@ -116,10 +116,25 @@ class Bot {
                     }
                     break;
                 default:
-                    if (message.author.id != 265572496223371265 && !message.content.toLowerCase().startsWith("systemctl")) {
-                        cleverbot.write(message.content, (r) => {
-                            message.reply(r.message);
+                    if (message.content.toLowerCase().startsWith("delete this interaction")) {
+                        var nlimit = parseInt(message.content.slice(24)) || 2
+                        nlimit = Math.min(nlimit, 100)
+                        message.channel.fetchMessages({ limit: nlimit }).then((c) => {
+                            var myMessages = c.filter(
+                                (m) => {
+                                    return m.author.id == 265572496223371265
+                                }
+                            ).array()
+                            for (var index in myMessages) {
+                                myMessages[index].delete()
+                            }
                         })
+                    } else {
+                        if ((message.author.id != 265572496223371265 || Math.floor(Math.random() * 5) + 1 == 1) && !message.content.toLowerCase().startsWith("systemctl")) {
+                            cleverbot.write(message.content, (r) => {
+                                message.reply(r.message);
+                            })
+                        }
                     }
                     break;
             }
