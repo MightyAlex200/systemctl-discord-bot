@@ -35,9 +35,11 @@ class Bot {
                 }
             }
             if (message.channel.name == "bot-chat"){
-                cleverbot.write(message.content, (r) => {
-                    message.reply(r.message);
-                })
+                if ((message.author.id != 265572496223371265) && !message.content.toLowerCase().startsWith("systemctl")) {
+                    cleverbot.write(message.content, (r) => {
+                        message.reply(r.message);
+                    })
+                }
             }
         }
         if (message.channel.type == "dm") {
