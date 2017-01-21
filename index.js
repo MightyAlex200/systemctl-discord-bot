@@ -130,7 +130,7 @@ class Bot {
                             }
                         })
                     } else {
-                        if ((message.author.id != 265572496223371265 || Math.floor(Math.random() * 5) + 1 == 1) && !message.content.toLowerCase().startsWith("systemctl")) {
+                        if ((message.author.id != 265572496223371265) && !message.content.toLowerCase().startsWith("systemctl")) {
                             cleverbot.write(message.content, (r) => {
                                 message.reply(r.message);
                             })
@@ -142,125 +142,100 @@ class Bot {
         }
         if (parsed[0] == "systemctl") {
             // This is a command
-            if (parsed[1] == "say") {
-                message.channel.sendMessage(message.content.replace("systemctl say ", ""));
-                if (message.deletable)
-                    message.delete();
-            }
-            if (parsed[1] == "avatar") {
-                if (parsed[2]) {
-                    if (message.guild) {
-                        var users = message.guild.members.array();
-                        var found = false;
-                        for (var i in users) {
-                            if (users[i].user.username.toLowerCase() == parsed[2].toLowerCase()) {
-                                message.reply(users[i].user.avatarURL);
-                                found = true;
-                                break;
-                            };
-                        }
-                        if (!found) {
-                            message.reply("User not found: " + parsed[2]);
-                        }
-                    }
-                } else {
-                    if (message.author.avatarURL) {
-                        message.reply(message.author.avatarURL);
-                    }
-                }
-            }
-            if (parsed[1] == "e621" || parsed[1] == "e926") {
-                if (!isNaN(parseInt(parsed[2]))) {
-                    var e926 = "";
-                    if (parsed[1] == "e926") {
-                        e926 = "+rating:s"
-                    }
-                    var options = {
-                        hostname: "e621.net",
-                        path: "/post/index.json?tags=" + message.content.slice(16 + parsed[2].length).replace(/ /g, "+") + e926 + "&limit=1&page=" + parsed[2],
-                        port: 443,
-                        headers: {
-                            'user-agent': 'systemctl-bot/1.1.0'
-                        }
-                    };
-                    console.log(options.path);
-                    https.get(options, (res) => {
-                        var str = '';
-                        res.on('data', (d) => {
-                            str += d;
-                        });
-                        res.on('end', () => {
-                            //console.log(JSON.parse(str)[parseInt(parsed[2])]);
-                            var parsedjson = JSON.parse(str);
-                            if (str != "[]") {
-                                ///message.channel.sendFile(JSON.parse(str)[0].file_url);
-                                var embed = new Discord.RichEmbed({
-                                    title: "Result:",
-                                    url: parsedjson[0].file_url
-                                });
-                                if (parsedjson[0].file_ext == "swf" || parsedjson[0].file_ext == "webm") {
-                                    embed.setImage(parsedjson[0].preview_url);
-                                } else {
-                                    embed.setImage(parsedjson[0].file_url);
-                                }
-                                switch (parsedjson[0].rating) {
-                                    case 's':
-                                        embed.setColor([0, 255, 0]);
-                                        break;
-                                    case 'q':
-                                        embed.setColor([255, 255, 0]);
-                                        break;
-                                    case 'e':
-                                        embed.setColor([255, 0, 0]);
-                                        break;
-                                }
-                                embed.setFooter("score: " + parsedjson[0].score);
-                                message.channel.sendEmbed(embed);
-                                if (parsedjson[0].rating == 'e') {
-                                    message.channel.sendMessage("( ͡° ͜ʖ ͡°)");
-                                }
-                                console.log(parsedjson[0].preview_url);
-                            } else {
-                                message.reply("404, file not found");
+            switch (parsed[1]) {
+                case "say":
+                    message.channel.sendMessage(message.content.replace("systemctl say ", ""));
+                    if (message.deletable)
+                        message.delete();
+                    break;
+                case "avatar":
+                    if (parsed[2]) {
+                        if (message.guild) {
+                            var users = message.guild.members.array();
+                            var found = false;
+                            for (var i in users) {
+                                if (users[i].user.username.toLowerCase() == parsed[2].toLowerCase()) {
+                                    message.reply(users[i].user.avatarURL);
+                                    found = true;
+                                    break;
+                                };
                             }
-                        })
-                    });
-                } else {
-                    if (parsed[2] == "count") {
+                            if (!found) {
+                                message.reply("User not found: " + parsed[2]);
+                            }
+                        }
+                    } else {
+                        if (message.author.avatarURL) {
+                            message.reply(message.author.avatarURL);
+                        }
+                    }
+                    break;
+                case "e621":
+                case "e926":
+                    if (!isNaN(parseInt(parsed[2]))) {
                         var e926 = "";
                         if (parsed[1] == "e926") {
                             e926 = "+rating:s"
                         }
                         var options = {
                             hostname: "e621.net",
-                            path: "/post/index.json?limit=320&tags=" + message.content.slice(16 + parsed[2].length).replace(/ /g, "+") + e926,
+                            path: "/post/index.json?tags=" + message.content.slice(16 + parsed[2].length).replace(/ /g, "+") + e926 + "&limit=1&page=" + parsed[2],
                             port: 443,
                             headers: {
                                 'user-agent': 'systemctl-bot/1.1.0'
                             }
                         };
+                        console.log(options.path);
                         https.get(options, (res) => {
                             var str = '';
                             res.on('data', (d) => {
                                 str += d;
                             });
                             res.on('end', () => {
+                                //console.log(JSON.parse(str)[parseInt(parsed[2])]);
                                 var parsedjson = JSON.parse(str);
-                                if (parsedjson.length != 320)
-                                    message.reply(parsedjson.length);
-                                else
-                                    message.reply("320+");
+                                if (str != "[]") {
+                                    ///message.channel.sendFile(JSON.parse(str)[0].file_url);
+                                    var embed = new Discord.RichEmbed({
+                                        title: "Result:",
+                                        url: parsedjson[0].file_url
+                                    });
+                                    if (parsedjson[0].file_ext == "swf" || parsedjson[0].file_ext == "webm") {
+                                        embed.setImage(parsedjson[0].preview_url);
+                                    } else {
+                                        embed.setImage(parsedjson[0].file_url);
+                                    }
+                                    switch (parsedjson[0].rating) {
+                                        case 's':
+                                            embed.setColor([0, 255, 0]);
+                                            break;
+                                        case 'q':
+                                            embed.setColor([255, 255, 0]);
+                                            break;
+                                        case 'e':
+                                            embed.setColor([255, 0, 0]);
+                                            break;
+                                    }
+                                    embed.setFooter("score: " + parsedjson[0].score);
+                                    message.channel.sendEmbed(embed);
+                                    if (parsedjson[0].rating == 'e') {
+                                        message.channel.sendMessage("( ͡° ͜ʖ ͡°)");
+                                    }
+                                    console.log(parsedjson[0].preview_url);
+                                } else {
+                                    message.reply("404, file not found");
+                                }
                             })
                         });
                     } else {
-                        if (parsed[2] == "link") {
+                        if (parsed[2] == "count") {
                             var e926 = "";
                             if (parsed[1] == "e926") {
                                 e926 = "+rating:s"
                             }
                             var options = {
                                 hostname: "e621.net",
-                                path: "/post/index.json?limit=1&page=" + parsed[3] + "&tags=" + message.content.slice(16 + parsed[2].length + parsed[3].length).replace(/ /g, "+") + e926,
+                                path: "/post/index.json?limit=320&tags=" + message.content.slice(16 + parsed[2].length).replace(/ /g, "+") + e926,
                                 port: 443,
                                 headers: {
                                     'user-agent': 'systemctl-bot/1.1.0'
@@ -273,15 +248,43 @@ class Bot {
                                 });
                                 res.on('end', () => {
                                     var parsedjson = JSON.parse(str);
-                                    message.reply("https://www.e621.net/post/show?id=" + parsedjson[0].id)
+                                    if (parsedjson.length != 320)
+                                        message.reply(parsedjson.length);
+                                    else
+                                        message.reply("320+");
                                 })
                             });
                         } else {
-                            message.reply("parsed[2] was incorrect (3rd word seperated by spaces should be number)!");
+                            if (parsed[2] == "link") {
+                                var e926 = "";
+                                if (parsed[1] == "e926") {
+                                    e926 = "+rating:s"
+                                }
+                                var options = {
+                                    hostname: "e621.net",
+                                    path: "/post/index.json?limit=1&page=" + parsed[3] + "&tags=" + message.content.slice(16 + parsed[2].length + parsed[3].length).replace(/ /g, "+") + e926,
+                                    port: 443,
+                                    headers: {
+                                        'user-agent': 'systemctl-bot/1.1.0'
+                                    }
+                                };
+                                https.get(options, (res) => {
+                                    var str = '';
+                                    res.on('data', (d) => {
+                                        str += d;
+                                    });
+                                    res.on('end', () => {
+                                        var parsedjson = JSON.parse(str);
+                                        message.reply("https://www.e621.net/post/show?id=" + parsedjson[0].id)
+                                    })
+                                });
+                            } else {
+                                message.reply("parsed[2] was incorrect (3rd word seperated by spaces should be number)!");
+                            }
                         }
                     }
-                }
 
+                    break;
             }
         }
         this.aspamlist[message.author.username] = Math.min(this.aspamlist[message.author.username] + 1 || 1, 5);
