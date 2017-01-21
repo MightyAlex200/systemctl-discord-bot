@@ -34,6 +34,11 @@ class Bot {
                     });
                 }
             }
+            if (message.channel.name == "bot-chat"){
+                cleverbot.write(message.content, (r) => {
+                    message.reply(r.message);
+                })
+            }
         }
         if (message.channel.type == "dm") {
             var isadmin = message.author.id == "140561788688269312" || message.author.id == "74549416190545920"
