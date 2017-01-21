@@ -5,7 +5,8 @@ const https = require('https');
 fs = require('fs');
 
 cleverbot = new Cleverbot;
-Cleverbot.prepare(() => { })
+cleverbot.configure({botapi: "systemctl-bot"});
+Cleverbot.prepare(() => { });
 
 class Bot {
 
