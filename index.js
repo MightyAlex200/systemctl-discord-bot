@@ -21,7 +21,7 @@ class Bot {
         var parsed = message.content.toLowerCase().split(" ");
         if (message.channel.type != "dm") {
             if (message.member.hasPermission("ADMINISTRATOR")) {
-                if (message.content.startsWith("freeze all motor functions")) {
+                if (message.content.startsWith("freeze all motor functions") || message.content.replace("'",'').startsWith("thats enough")) {
                     // message.reply("done.");
                     message.channel.overwritePermissions(message.mentions.users.first(), {
                         SEND_MESSAGES: false
