@@ -357,8 +357,8 @@ setInterval(() => {
                 // console.log(parsedjson[0].id);
                 if (last != parsedjson[0].id.toString()) {
                     // console.log('new post! ' + last + ' to ' + parsedjson[0].id.toString());
-                    client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('Nitro faved something on e621 ( ͡° ͜ʖ ͡°).');
-                    client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('systemctl e621 1 favoritedby:furrylocked');
+                    client.guilds.findAll('name', 'manjaro')[0].channels.findAll('name', 'nsfw')[0].sendMessage('Nitro faved something on e621 ( ͡° ͜ʖ ͡°).');
+                    client.guilds.findAll('name', 'manjaro')[0].channels.findAll('name', 'nsfw')[0].sendMessage('systemctl e621 1 favoritedby:furrylocked');
                     // console.log('got something from nitro: ' + last + ' to ' + parsedjson[0].id.toString());
                 }
                 fs.writeFile('lastposted.log', parsedjson[0].id.toString(), (err) => {
@@ -391,8 +391,8 @@ setInterval(() => {
                     if (parsedjson[0].rating == 's') {
                         e926 = 'e926';
                     }
-                    client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('hitius faved something on ' + e926);
-                    client.guilds.findAll('name', 'arch')[0].channels.findAll('name', 'no-dont-touch-that')[0].sendMessage('systemctl e621 1 favoritedby:hitius');
+                    client.guilds.findAll('name', 'manjaro')[0].channels.findAll('name', 'nsfw')[0].sendMessage('hitius faved something on ' + e926);
+                    client.guilds.findAll('name', 'manjaro')[0].channels.findAll('name', 'nsfw')[0].sendMessage('systemctl e621 1 favoritedby:hitius');
                     // console.log('got something from hitius: ' + last + ' to ' + parsedjson[0].id.toString());
                 }
                 fs.writeFile('lastposted-hitius.log', parsedjson[0].id.toString(), (err) => {
